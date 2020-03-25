@@ -1,6 +1,6 @@
 package com.tin.popularmovies.di.modules
 
-import com.tin.popularmovies.HomeActivity
+import com.tin.popularmovies.ui.HomeActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
