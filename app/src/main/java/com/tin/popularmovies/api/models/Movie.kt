@@ -1,5 +1,6 @@
 package com.tin.popularmovies.api.models
 
+
 data class MoviesResult(
     val page: Int,
     val total_results: Int,

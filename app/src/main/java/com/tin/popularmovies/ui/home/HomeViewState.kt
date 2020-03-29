@@ -1,4 +1,4 @@
-package com.tin.popularmovies.ui
+package com.tin.popularmovies.ui.home
 
 import com.tin.popularmovies.api.models.Movie
 

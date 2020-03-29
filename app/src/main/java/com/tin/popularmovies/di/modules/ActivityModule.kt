@@ -1,6 +1,7 @@
 package com.tin.popularmovies.di.modules
 
-import com.tin.popularmovies.ui.HomeActivity
+import com.tin.popularmovies.ui.detail.DetailActivity
+import com.tin.popularmovies.ui.home.HomeActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -9,5 +10,8 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract fun bindHomeActivity(): HomeActivity
+
+    @ContributesAndroidInjector
+    abstract fun bindDetailActivity(): DetailActivity
 
 }

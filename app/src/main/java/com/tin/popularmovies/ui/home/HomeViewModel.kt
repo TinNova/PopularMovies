@@ -1,4 +1,4 @@
-package com.tin.popularmovies.ui
+package com.tin.popularmovies.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import com.tin.popularmovies.DisposingViewModel

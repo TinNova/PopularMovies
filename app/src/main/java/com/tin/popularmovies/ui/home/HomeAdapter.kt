@@ -1,4 +1,4 @@
-package com.tin.popularmovies.ui
+package com.tin.popularmovies.ui.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.item_movie.view.*
 class HomeAdapter(private val onMovieClicked: (Movie) -> Unit) :
     RecyclerView.Adapter<HomeAdapter.MovieHolder>() {
 
-    private var movieData: List<Movie> = listOf()
+    private var movies: List<Movie> = listOf()
 
-    override fun getItemCount(): Int = movieData.size
+    override fun getItemCount(): Int = movies.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
@@ -23,12 +23,12 @@ class HomeAdapter(private val onMovieClicked: (Movie) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-        holder.bind(movieData[position])
-        holder.itemView.setOnClickListener { onMovieClicked(movieData[position]) }
+        holder.bind(movies[position])
+        holder.itemView.setOnClickListener { onMovieClicked(movies[position]) }
     }
 
     fun setData(data: List<Movie>) {
-        movieData = data
+        movies = data
         notifyDataSetChanged()
     }
 

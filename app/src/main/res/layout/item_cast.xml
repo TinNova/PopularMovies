@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/cast_thumbnail"
+        android:layout_width="@dimen/castImgWidth"
+        android:layout_height="@dimen/castImgHeight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/alsen" />
+
+    <TextView
+        android:id="@+id/character_name"
+        style="@style/CastText"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/cast_thumbnail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cast_thumbnail"
+        tools:text="Baby" />
+
+    <TextView
+        android:id="@+id/actor_name"
+        style="@style/CastText"
+        android:textSize="@dimen/font_x_small"
+        app:layout_constraintEnd_toEndOf="@+id/cast_thumbnail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_name"
+        tools:text="Ansel Elgort" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
