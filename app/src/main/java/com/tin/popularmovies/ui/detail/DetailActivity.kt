@@ -2,18 +2,19 @@ package com.tin.popularmovies.ui.detail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
 import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_ID
-import com.tin.popularmovies.ui.home.HomeViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
+
 
 class DetailActivity : AppCompatActivity() {
 
@@ -67,7 +68,8 @@ class DetailActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = castAdapter
             setHasFixedSize(true)
+            val itemDecorator = object : ItemDecorator(R.dimen.margin_default) {}
+            addItemDecoration(itemDecorator)
         }
     }
-
 }
