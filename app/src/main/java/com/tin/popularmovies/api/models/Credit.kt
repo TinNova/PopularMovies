@@ -29,7 +29,7 @@ data class Crew(
     val gender: Int = -1
 )
 
-fun Cast.appendBaseImgUrl() =
+fun Cast.returnCleanCast() =
     Cast(
         id = id,
         cast_id = cast_id,

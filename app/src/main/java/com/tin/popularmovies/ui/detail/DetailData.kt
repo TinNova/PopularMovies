@@ -5,7 +5,7 @@ import com.tin.popularmovies.api.models.Detail
 import com.tin.popularmovies.api.models.Trailer
 
 data class DetailData(
-    val detail: Detail?,
+    val detail: Detail,
     val trailers: List<Trailer>,
     val cast: List<Cast>
 )

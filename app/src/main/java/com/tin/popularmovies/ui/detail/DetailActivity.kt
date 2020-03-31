@@ -9,12 +9,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import com.tin.popularmovies.Const
+import com.tin.popularmovies.Const.BASE_IMAGE_URL
 import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
 import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_ID
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.item_trailer.view.*
 import javax.inject.Inject
 
 
@@ -50,7 +54,7 @@ class DetailActivity : AppCompatActivity() {
         viewModel.viewState.observe(this, Observer<DetailViewState> {
             it?.let {
                 when (it.isPresenting) {
-                    true -> showData(it)
+                    true -> showData(it.detailData)
 //                    false -> movie_recycler_view.gone()
                 }
                 when (it.isLoading) {
@@ -65,9 +69,18 @@ class DetailActivity : AppCompatActivity() {
         })
     }
 
-    private fun showData(it: DetailViewState) {
-        castAdapter.setData(it.detailData.cast)
-        trailerAdapter.setData(it.detailData.trailers)
+    private fun showData(it: DetailData) {
+        castAdapter.setData(it.cast)
+        trailerAdapter.setData(it.trailers)
+        it.detail.run {
+            movie_title.text = title
+            movie_rating.text = vote_average.toString()
+            movie_release_date.text = release_date
+            movie_synopsis.text = overview
+            Picasso.get()
+                .load(poster_path)
+                .into(movie_image)
+        }
     }
 
     private fun playTrailer(trailerUrl: Uri) {

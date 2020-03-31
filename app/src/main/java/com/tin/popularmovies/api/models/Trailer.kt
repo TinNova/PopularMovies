@@ -31,7 +31,7 @@ data class Trailer(
     val type: String
 )
 
-fun TrailerOriginal.appendThumbnail() =
+fun TrailerOriginal.returnCleanTrailer() =
     Trailer(
         id = id,
         key = key,

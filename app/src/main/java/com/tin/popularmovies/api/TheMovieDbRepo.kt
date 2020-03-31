@@ -25,7 +25,7 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flattenAsObservable { it.trailers }
-            .map { it.appendThumbnail() }
+            .map { it.returnCleanTrailer() }
             .toList()
 
     private fun getCast(movieId: Int): Single<List<Cast>> =
@@ -36,7 +36,7 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flattenAsObservable { it.cast }
-            .map { it.appendBaseImgUrl() }
+            .map { it.returnCleanCast() }
             .toList()
 
 
@@ -47,6 +47,7 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .map { it.returnCleanDetail()}
 
     fun getDetailData(movieId: Int): Single<DetailData> = Single.zip(
         getTrailers(movieId),

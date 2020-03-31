@@ -1,6 +1,8 @@
 package com.tin.popularmovies.api.models
 
-import com.google.gson.annotations.SerializedName
+import android.net.Uri
+import com.tin.popularmovies.Const
+import com.tin.popularmovies.Const.BASE_IMAGE_URL
 
 
 data class Detail(
@@ -52,3 +54,14 @@ data class SpokenLanguage(
     val iso_639_1: String,
     val name: String
 )
+
+
+fun Detail.returnCleanDetail() =
+    Detail(
+        id = id,
+        title = title,
+        vote_average = vote_average,
+        release_date = release_date,
+        overview = overview,
+        poster_path = BASE_IMAGE_URL + poster_path
+    )
