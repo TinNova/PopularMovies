@@ -94,7 +94,7 @@
         app:layout_constraintTop_toBottomOf="@+id/movie_synopsis" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_trailer"
+        android:id="@+id/trailer_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_default"
@@ -111,7 +111,7 @@
         android:textSize="21sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview_trailer" />
+        app:layout_constraintTop_toBottomOf="@+id/trailer_recyclerview" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cast_recyclerView"

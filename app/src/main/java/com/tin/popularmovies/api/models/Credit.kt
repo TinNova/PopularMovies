@@ -29,7 +29,6 @@ data class Crew(
     val gender: Int = -1
 )
 
-
 fun Cast.appendBaseImgUrl() =
     Cast(
         id = id,

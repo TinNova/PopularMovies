@@ -1,6 +1,6 @@
-package com.tin.popularmovies
+package com.tin.popularmovies.api
 
-import com.tin.popularmovies.api.TheMovieDbApi
+import com.tin.popularmovies.BuildConfig
 import com.tin.popularmovies.api.models.*
 import com.tin.popularmovies.ui.detail.DetailData
 import io.reactivex.Single
@@ -18,13 +18,21 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
             .map { it.results }
 
     private fun getTrailers(movieId: Int): Single<List<Trailer>> =
-        theMovieDbApi.getTrailers(movieId, BuildConfig.MOVIE_DATA_BASE_API)
+        theMovieDbApi.getTrailers(
+            movieId,
+            BuildConfig.MOVIE_DATA_BASE_API
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { it.trailers }
+            .flattenAsObservable { it.trailers }
+            .map { it.appendThumbnail() }
+            .toList()
 
     private fun getCast(movieId: Int): Single<List<Cast>> =
-        theMovieDbApi.getCast(movieId, BuildConfig.MOVIE_DATA_BASE_API)
+        theMovieDbApi.getCast(
+            movieId,
+            BuildConfig.MOVIE_DATA_BASE_API
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flattenAsObservable { it.cast }
@@ -33,7 +41,10 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
 
 
     private fun getDetail(movieId: Int): Single<Detail> =
-        theMovieDbApi.getDetail(movieId, BuildConfig.MOVIE_DATA_BASE_API)
+        theMovieDbApi.getDetail(
+            movieId,
+            BuildConfig.MOVIE_DATA_BASE_API
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 

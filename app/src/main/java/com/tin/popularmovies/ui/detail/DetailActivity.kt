@@ -1,12 +1,14 @@
 package com.tin.popularmovies.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
@@ -22,8 +24,13 @@ class DetailActivity : AppCompatActivity() {
     internal lateinit var viewModelFactory: ViewModelFactory<DetailViewModel>
     private lateinit var viewModel: DetailViewModel
 
-    private var castAdapter = CastAdapter()
-//    private lateinit var trailerAdapter: TrailerAdapter
+    private val castAdapter = CastAdapter()
+
+    private val trailerAdapter: TrailerAdapter by lazy {
+        TrailerAdapter {
+            playTrailer(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,13 +67,30 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showData(it: DetailViewState) {
         castAdapter.setData(it.detailData.cast)
+        trailerAdapter.setData(it.detailData.trailers)
     }
 
-    // Add View Decorators here to add spacing between cast images
+    private fun playTrailer(trailerUrl: Uri) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = trailerUrl
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Can't Play Trailer", Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun setupRecyclerView() {
-        cast_recyclerView.run {
+        cast_recyclerView.adapter = castAdapter
+        setupLinearLayout(cast_recyclerView)
+        trailer_recyclerview.adapter = trailerAdapter
+        setupLinearLayout(trailer_recyclerview)
+    }
+
+    private fun setupLinearLayout(castRecyclerview: RecyclerView) {
+        castRecyclerview.run {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = castAdapter
             setHasFixedSize(true)
             val itemDecorator = object : ItemDecorator(R.dimen.margin_default) {}
             addItemDecoration(itemDecorator)

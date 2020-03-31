@@ -2,7 +2,8 @@ package com.tin.popularmovies.ui.detail
 
 import androidx.lifecycle.MutableLiveData
 import com.tin.popularmovies.DisposingViewModel
-import com.tin.popularmovies.TheMovieDbRepo
+import com.tin.popularmovies.api.TheMovieDbRepo
+import com.tin.popularmovies.api.models.Trailer
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
@@ -13,6 +14,10 @@ class DetailViewModel @Inject constructor(
 
     fun onViewLoaded(movieId: Int) {
         getData(movieId)
+    }
+
+    fun onTrailerClicked(it: Trailer) {
+
     }
 
     private fun getData(movieId: Int) {

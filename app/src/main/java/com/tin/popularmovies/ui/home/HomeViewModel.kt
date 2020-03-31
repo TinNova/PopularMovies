@@ -2,7 +2,7 @@ package com.tin.popularmovies.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import com.tin.popularmovies.DisposingViewModel
-import com.tin.popularmovies.TheMovieDbRepo
+import com.tin.popularmovies.api.TheMovieDbRepo
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
