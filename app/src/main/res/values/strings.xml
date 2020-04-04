@@ -12,4 +12,7 @@
     <string name="cast">Cast</string>
     <string name="reviews">Reviews</string>
 
+    <string name="transition_movie_image">movie_image</string>
+
+
 </resources>

@@ -16,10 +16,6 @@ class DetailViewModel @Inject constructor(
         getData(movieId)
     }
 
-    fun onTrailerClicked(it: Trailer) {
-
-    }
-
     private fun getData(movieId: Int) {
         add(theMovieDbRepo.getDetailData(movieId).subscribe(
             {

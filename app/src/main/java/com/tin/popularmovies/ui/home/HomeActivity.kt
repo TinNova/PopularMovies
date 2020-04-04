@@ -2,8 +2,10 @@ package com.tin.popularmovies.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class HomeActivity : AppCompatActivity() {
 
     companion object {
-        const val MOVIE_ID = "movieId"
+        const val MOVIE_ID = "movie_key"
+        const val MOVIE_TRANSITION = "movie_transition"
     }
 
     @Inject
@@ -28,8 +31,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var viewModel: HomeViewModel
 
     private val adapter: HomeAdapter by lazy {
-        HomeAdapter {
-            launchDetailActivity(it)
+        HomeAdapter { movie: Movie, imageView: ImageView ->
+            launchDetailActivity(movie, imageView)
         }
     }
 
@@ -68,10 +71,27 @@ class HomeActivity : AppCompatActivity() {
         adapter.setData(movies)
     }
 
-    private fun launchDetailActivity(it: Movie) {
+    private fun launchDetailActivity(selectedMovie: Movie, imageView: ImageView) {
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(MOVIE_ID, it.id)
-        startActivity(intent)
+        intent.putExtra(MOVIE_ID, selectedMovie)
+        intent.putExtra(MOVIE_TRANSITION, ViewCompat.getTransitionName(imageView));
+
+        // what happens when getTransitionName is null?
+        if (ViewCompat.getTransitionName(imageView) == null) {
+            startActivity(intent)
+        } else {
+            startActivity(
+                intent,
+                makeSceneTransitionAnimation(
+                    this,
+                    imageView,
+                    ViewCompat.getTransitionName(imageView)!! //-> Handle this better
+                ).toBundle())
+        }
+
+//        ViewCompat.getTransitionName(imageView)?.let {
+//            startActivity(intent, makeSceneTransitionAnimation(this, imageView, it).toBundle())
+//        }
     }
 
     private fun setupRecyclerView() {

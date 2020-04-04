@@ -1,13 +1,11 @@
 package com.tin.popularmovies.api.models
 
-import android.net.Uri
-import com.tin.popularmovies.Const
 import com.tin.popularmovies.Const.BASE_IMAGE_URL
 
 
 data class Detail(
     val adult: Boolean = false,
-    val backdropPath: String = "",
+    val backdrop_path: String = "",
     val belongsToCollection: Any = Any(), //belongs_to_collection
     val budget: Int = 0,
     val genres: List<Genre> = listOf(),
@@ -63,5 +61,6 @@ fun Detail.returnCleanDetail() =
         vote_average = vote_average,
         release_date = release_date,
         overview = overview,
-        poster_path = BASE_IMAGE_URL + poster_path
+        poster_path = BASE_IMAGE_URL + poster_path,
+        backdrop_path = BASE_IMAGE_URL + backdrop_path
     )

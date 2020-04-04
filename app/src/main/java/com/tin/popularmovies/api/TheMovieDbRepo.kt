@@ -15,7 +15,9 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
         theMovieDbApi.getTopRatedMovies(BuildConfig.MOVIE_DATA_BASE_API)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { it.results }
+            .flattenAsObservable { it.results }
+            .map { it.returnCleanMovie() }
+            .toList()
 
     private fun getTrailers(movieId: Int): Single<List<Trailer>> =
         theMovieDbApi.getTrailers(

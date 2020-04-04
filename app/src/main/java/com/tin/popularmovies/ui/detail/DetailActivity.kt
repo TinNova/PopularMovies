@@ -9,16 +9,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import com.tin.popularmovies.Const
-import com.tin.popularmovies.Const.BASE_IMAGE_URL
 import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
+import com.tin.popularmovies.api.models.Movie
 import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_ID
+import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_TRANSITION
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.item_trailer.view.*
 import javax.inject.Inject
 
 
@@ -43,7 +43,15 @@ class DetailActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
 
         intent.extras?.let {
-            viewModel.onViewLoaded(it.getInt(MOVIE_ID))
+            val movie = it.get(MOVIE_ID) as Movie
+            viewModel.onViewLoaded(movie.id)
+            movie_image.transitionName = it.get(MOVIE_TRANSITION) as String
+            Picasso.get().load(movie.poster_path).into(movie_image)
+            Picasso.get().load(movie.backdrop_path).into(backdrop_image)
+            movie_title.text = movie.title
+            movie_rating.text = movie.vote_average.toString()
+            movie_release_date.text = movie.release_date
+            movie_synopsis.text = movie.overview
         }
 
         observeViewState()
@@ -72,15 +80,6 @@ class DetailActivity : AppCompatActivity() {
     private fun showData(it: DetailData) {
         castAdapter.setData(it.cast)
         trailerAdapter.setData(it.trailers)
-        it.detail.run {
-            movie_title.text = title
-            movie_rating.text = vote_average.toString()
-            movie_release_date.text = release_date
-            movie_synopsis.text = overview
-            Picasso.get()
-                .load(poster_path)
-                .into(movie_image)
-        }
     }
 
     private fun playTrailer(trailerUrl: Uri) {
@@ -108,5 +107,9 @@ class DetailActivity : AppCompatActivity() {
             val itemDecorator = object : ItemDecorator(R.dimen.margin_default) {}
             addItemDecoration(itemDecorator)
         }
+    }
+
+    override fun onBackPressed() {
+        supportFinishAfterTransition()
     }
 }
