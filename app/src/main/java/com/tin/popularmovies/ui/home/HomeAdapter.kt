@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -12,7 +13,7 @@ import com.tin.popularmovies.api.models.Movie
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class HomeAdapter(private val onMovieClicked: (Movie, ImageView) -> Unit) :
+class HomeAdapter(private val onMovieClicked: (Movie, CardView) -> Unit) :
     RecyclerView.Adapter<HomeAdapter.MovieHolder>() {
 
     private var movies: List<Movie> = listOf()
@@ -32,7 +33,7 @@ class HomeAdapter(private val onMovieClicked: (Movie, ImageView) -> Unit) :
          * Giving each item a unique transitionName by using the movie.id
          */
         ViewCompat.setTransitionName(holder.itemView.movie_image, movie.id.toString());
-        holder.itemView.setOnClickListener { onMovieClicked(movie, holder.itemView.movie_image) }
+        holder.itemView.setOnClickListener { onMovieClicked(movie, holder.itemView.movie_card) }
     }
 
     fun setData(data: List<Movie>) {

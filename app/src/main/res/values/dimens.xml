@@ -10,11 +10,7 @@
 
     <!-- Margins -->
     <dimen name="margin_default">8dp</dimen>
-
-
-
-    <dimen name="detailPosterHeight">186dp</dimen>
-    <dimen name="detailPosterWidth">123dp</dimen>
+    <dimen name="detail_poster_top_margin">206dp</dimen>
 
     <dimen name="castImgHeight">128.25dp</dimen>
     <dimen name="castImgWidth">85.5dp</dimen>

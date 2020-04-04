@@ -45,7 +45,7 @@ class DetailActivity : AppCompatActivity() {
         intent.extras?.let {
             val movie = it.get(MOVIE_ID) as Movie
             viewModel.onViewLoaded(movie.id)
-            movie_image.transitionName = it.get(MOVIE_TRANSITION) as String
+            movie_card.transitionName = it.get(MOVIE_TRANSITION) as String
             Picasso.get().load(movie.poster_path).into(movie_image)
             Picasso.get().load(movie.backdrop_path).into(backdrop_image)
             movie_title.text = movie.title

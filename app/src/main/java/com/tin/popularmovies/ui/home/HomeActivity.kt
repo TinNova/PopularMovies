@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
@@ -31,8 +32,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var viewModel: HomeViewModel
 
     private val adapter: HomeAdapter by lazy {
-        HomeAdapter { movie: Movie, imageView: ImageView ->
-            launchDetailActivity(movie, imageView)
+        HomeAdapter { movie: Movie, cardView: CardView ->
+            launchDetailActivity(movie, cardView)
         }
     }
 
@@ -71,21 +72,21 @@ class HomeActivity : AppCompatActivity() {
         adapter.setData(movies)
     }
 
-    private fun launchDetailActivity(selectedMovie: Movie, imageView: ImageView) {
+    private fun launchDetailActivity(selectedMovie: Movie, cardView: CardView) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(MOVIE_ID, selectedMovie)
-        intent.putExtra(MOVIE_TRANSITION, ViewCompat.getTransitionName(imageView));
+        intent.putExtra(MOVIE_TRANSITION, ViewCompat.getTransitionName(cardView));
 
         // what happens when getTransitionName is null?
-        if (ViewCompat.getTransitionName(imageView) == null) {
+        if (ViewCompat.getTransitionName(cardView) == null) {
             startActivity(intent)
         } else {
             startActivity(
                 intent,
                 makeSceneTransitionAnimation(
                     this,
-                    imageView,
-                    ViewCompat.getTransitionName(imageView)!! //-> Handle this better
+                    cardView,
+                    ViewCompat.getTransitionName(cardView)!! //-> Handle this better
                 ).toBundle())
         }
 

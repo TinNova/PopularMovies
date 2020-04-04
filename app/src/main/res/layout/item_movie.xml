@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/movie_image"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/movie_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitStart"
-        android:transitionName="@string/transition_movie_image"
-        tools:srcCompat="@drawable/planetoftheapes" />
+        app:cardCornerRadius="0dp"
+        android:transitionName="@string/transition_movie_image">
+
+        <ImageView
+            android:id="@+id/movie_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            tools:srcCompat="@drawable/planetoftheapes" />
+
+    </androidx.cardview.widget.CardView>
 
 </GridLayout>
