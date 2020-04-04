@@ -7,13 +7,19 @@
     <dimen name="font_small">14sp</dimen>
     <dimen name="font_x_small">12sp</dimen>
 
-
     <!-- Margins -->
     <dimen name="margin_default">8dp</dimen>
+
     <dimen name="detail_poster_top_margin">206dp</dimen>
+    <dimen name="detail_poster_corner_radius">8dp</dimen>
 
-    <dimen name="castImgHeight">128.25dp</dimen>
-    <dimen name="castImgWidth">85.5dp</dimen>
+    <!-- Elevation -->
+    <dimen name="half_elevation">4dp</dimen>
+    <dimen name="default_elevation">8dp</dimen>
 
+    <!-- Cast Item Dimens-->
+    <dimen name="cast_img_height">100dp</dimen>
+    <dimen name="cast_img_width">100dp</dimen>
+    <dimen name="cast_img_radius">50dp</dimen>
 
 </resources>

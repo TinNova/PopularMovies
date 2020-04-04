@@ -5,30 +5,41 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/cast_thumbnail"
-        android:layout_width="@dimen/castImgWidth"
-        android:layout_height="@dimen/castImgHeight"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cast_card"
+        android:layout_width="@dimen/cast_img_width"
+        android:layout_height="@dimen/cast_img_height"
+        app:cardElevation="@dimen/half_elevation"
+        app:cardCornerRadius="@dimen/cast_img_radius"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/alsen" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/cast_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/alsen" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/character_name"
         style="@style/CastText"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/cast_thumbnail"
+        app:layout_constraintEnd_toEndOf="@+id/cast_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cast_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/cast_card"
         tools:text="Baby" />
 
     <TextView
         android:id="@+id/actor_name"
         style="@style/CastText"
         android:textSize="@dimen/font_x_small"
-        app:layout_constraintEnd_toEndOf="@+id/cast_thumbnail"
+        app:layout_constraintEnd_toEndOf="@+id/cast_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/character_name"
         tools:text="Ansel Elgort" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
