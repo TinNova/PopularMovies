@@ -18,7 +18,6 @@
 
     <style name="DetailPoster">
         <item name="android:layout_marginStart">@dimen/margin_default</item>
-        <item name="android:layout_marginTop">@dimen/detail_poster_top_margin</item>
         <item name="android:transitionName">@string/transition_movie_image</item>
     </style>
 

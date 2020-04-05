@@ -1,6 +1,7 @@
 package com.tin.popularmovies.ui.detail
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -9,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Callback
+import com.google.android.material.appbar.AppBarLayout
 import com.squareup.picasso.Picasso
 import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
@@ -52,6 +53,7 @@ class DetailActivity : AppCompatActivity() {
             movie_rating.text = movie.vote_average.toString()
             movie_release_date.text = movie.release_date
             movie_synopsis.text = movie.overview
+            setCollapsingToolbarTitle(movie.title)
         }
 
         observeViewState()
@@ -98,6 +100,8 @@ class DetailActivity : AppCompatActivity() {
         setupLinearLayout(cast_recyclerView)
         trailer_recyclerview.adapter = trailerAdapter
         setupLinearLayout(trailer_recyclerview)
+
+        collapsing_toolbar.setExpandedTitleColor(Color.parseColor("#00FFFFFF"));
     }
 
     private fun setupLinearLayout(castRecyclerview: RecyclerView) {
@@ -111,5 +115,22 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         supportFinishAfterTransition()
+    }
+
+    private fun setCollapsingToolbarTitle(title: String) {
+        var isShow = true
+        var scrollRange = -1
+        app_bar_layout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
+            if (scrollRange == -1) {
+                scrollRange = barLayout?.totalScrollRange!!
+            }
+            if (scrollRange + verticalOffset == 0) {
+                collapsing_toolbar.title = title
+                isShow = true
+            } else if (isShow) {
+                collapsing_toolbar.title = " "
+                isShow = false
+            }
+        })
     }
 }
