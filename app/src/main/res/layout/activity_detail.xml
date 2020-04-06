@@ -22,8 +22,7 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="joeyertert">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/backdrop_image"
@@ -48,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:behavior_overlapTop="58dp"
+        android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
