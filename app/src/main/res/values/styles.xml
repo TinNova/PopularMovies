@@ -9,11 +9,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
         <!-- Shared Activity Transition-->
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowEnterTransition">@transition/track_transition_exclusions</item>
         <item name="android:windowExitTransition">@transition/track_transition_exclusions</item>
+    </style>
+
+    <style name="TransparentStatusBarTheme" parent="BaseTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="DetailPoster">
