@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -104,12 +105,13 @@ class DetailActivity : AppCompatActivity() {
         collapsing_toolbar.setExpandedTitleColor(Color.parseColor("#00FFFFFF"));
     }
 
-    private fun setupLinearLayout(castRecyclerview: RecyclerView) {
-        castRecyclerview.run {
+    private fun setupLinearLayout(recyclerview: RecyclerView) {
+        recyclerview.run {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             val itemDecorator = object : ItemDecorator(R.dimen.margin_default) {}
             addItemDecoration(itemDecorator)
+            ViewCompat.setNestedScrollingEnabled(this, false)
         }
     }
 
