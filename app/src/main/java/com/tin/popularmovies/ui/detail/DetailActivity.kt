@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -57,6 +58,8 @@ class DetailActivity : AppCompatActivity() {
             setCollapsingToolbarTitle(movie.title)
         }
 
+        setSupportActionBar(tool_bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         observeViewState()
         setupRecyclerView()
     }
@@ -117,6 +120,16 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         supportFinishAfterTransition()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                supportFinishAfterTransition()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setCollapsingToolbarTitle(title: String) {
