@@ -12,7 +12,10 @@ import javax.inject.Inject
 class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbApi) {
 
     fun getTopRateMovies(): Single<List<Movie>> =
-        theMovieDbApi.getTopRatedMovies(BuildConfig.MOVIE_DATA_BASE_API)
+        theMovieDbApi.getTopRatedMovies(
+            BuildConfig.MOVIE_DATA_BASE_API,
+            1
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flattenAsObservable { it.results }
@@ -49,7 +52,7 @@ class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbAp
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map { it.returnCleanDetail()}
+            .map { it.returnCleanDetail() }
 
     fun getDetailData(movieId: Int): Single<DetailData> = Single.zip(
         getTrailers(movieId),

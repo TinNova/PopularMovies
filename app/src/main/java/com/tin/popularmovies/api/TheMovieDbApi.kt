@@ -12,24 +12,25 @@ import retrofit2.http.Query
 
 interface TheMovieDbApi {
 
-    @GET("3/movie/top_rated?language=en-UK&page=1")
+    @GET("3/movie/top_rated")
     fun getTopRatedMovies(
-        @Query("api_key") apiKey: String
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
     ): Single<MoviesResult>
 
-    @GET("3/movie/{MOVIE_ID}/videos?language=en-UK")
+    @GET("3/movie/{MOVIE_ID}/videos")
     fun getTrailers(
         @Path("MOVIE_ID") movieId: Int,
         @Query("api_key") apiKey: String
     ): Single<TrailersResult>
 
-    @GET("3/movie/{MOVIE_ID}/credits?language=en-UK")
+    @GET("3/movie/{MOVIE_ID}/credits")
     fun getCast(
         @Path("MOVIE_ID") movieId: Int,
         @Query("api_key") apiKey: String
     ): Single<Credit>
 
-    @GET("3/movie/{MOVIE_ID}?language=en-UK")
+    @GET("3/movie/{MOVIE_ID}")
     fun getDetail(
         @Path("MOVIE_ID") movieId: Int,
         @Query("api_key") apiKey: String
