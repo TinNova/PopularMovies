@@ -1,9 +1,11 @@
 package com.tin.popularmovies.di.modules
 
+import android.app.Application
 import com.tin.popularmovies.api.TheMovieDbApi
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,12 +15,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 class ApiModule {
 
+    private val cacheSizeBytes = 1024 * 1024 * 5
+
     @Provides
     @Reusable
-    fun providesRetrofit(okHttpClient: OkHttpClient): TheMovieDbApi =
+    fun providesRetrofit(cache: Cache, okHttpClient: OkHttpClient.Builder): TheMovieDbApi =
         Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/")
-            .client(okHttpClient)
+            .client(okHttpClient
+                .cache(cache)
+                .build()
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
@@ -26,8 +33,12 @@ class ApiModule {
 
     @Provides
     @Reusable
-    fun providesOkHttpClient(): OkHttpClient =
+    fun providesOkHttpClient(): OkHttpClient.Builder =
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .build()
+
+    @Provides
+    @Reusable
+    fun provideCache(application: Application): Cache = Cache(application.cacheDir, cacheSizeBytes.toLong())
+
 }
