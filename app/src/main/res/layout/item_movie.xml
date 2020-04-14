@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,19 +7,22 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/movie_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:transitionName="@string/transition_movie_image"
         app:cardCornerRadius="0dp"
-        android:transitionName="@string/transition_movie_image">
+        app:layout_constraintDimensionRatio="w,3:2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/movie_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitStart"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             tools:srcCompat="@drawable/planetoftheapes" />
 
     </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</GridLayout>
