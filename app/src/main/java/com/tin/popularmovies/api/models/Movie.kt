@@ -1,7 +1,8 @@
 package com.tin.popularmovies.api.models
 
 import android.os.Parcelable
-import com.tin.popularmovies.Const.BASE_IMAGE_URL
+import com.tin.popularmovies.Const.BASE_IMAGE_LARGE
+import com.tin.popularmovies.Const.BASE_IMAGE_MEDIUM
 import kotlinx.android.parcel.Parcelize
 
 
@@ -37,6 +38,6 @@ fun Movie.returnCleanMovie() =
         vote_average = vote_average,
         release_date = release_date,
         overview = overview,
-        poster_path = BASE_IMAGE_URL + poster_path,
-        backdrop_path = BASE_IMAGE_URL + backdrop_path
+        poster_path = BASE_IMAGE_LARGE + poster_path,
+        backdrop_path = BASE_IMAGE_LARGE + backdrop_path
     )

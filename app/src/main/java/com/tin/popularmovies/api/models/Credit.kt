@@ -1,6 +1,7 @@
 package com.tin.popularmovies.api.models
 
-import com.tin.popularmovies.Const.BASE_IMAGE_URL
+import com.tin.popularmovies.Const.BASE_IMAGE_MEDIUM
+import com.tin.popularmovies.Const.BASE_IMAGE_SMALL
 
 data class Credit(
     val id: Int,
@@ -38,5 +39,5 @@ fun Cast.returnCleanCast() =
         gender = gender,
         name = name,
         order = order,
-        profile_path = BASE_IMAGE_URL + profile_path
+        profile_path = BASE_IMAGE_SMALL + profile_path
     )

@@ -3,14 +3,12 @@ package com.tin.popularmovies.ui.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.tin.popularmovies.R
 import com.tin.popularmovies.api.models.Movie
-import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class HomeAdapter(private val onMovieClicked: (Movie, CardView) -> Unit) :
@@ -27,7 +25,10 @@ class HomeAdapter(private val onMovieClicked: (Movie, CardView) -> Unit) :
 
         val movie = movies[position]
 
-        Picasso.get().load(movie.poster_path).into(holder.itemView.movie_image)
+        Picasso.get()
+            .load(movie.poster_path)
+            .placeholder(R.drawable.img_movie_poster_placeholder)
+            .into(holder.itemView.movie_image)
 
         /*
          * Giving each item a unique transitionName by using the movie.id

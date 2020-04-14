@@ -1,7 +1,6 @@
 package com.tin.popularmovies.api.models
 
-import com.tin.popularmovies.Const.BASE_IMAGE_URL
-
+import com.tin.popularmovies.Const.BASE_IMAGE_MEDIUM
 
 data class Detail(
     val adult: Boolean = false,
@@ -61,6 +60,6 @@ fun Detail.returnCleanDetail() =
         vote_average = vote_average,
         release_date = release_date,
         overview = overview,
-        poster_path = BASE_IMAGE_URL + poster_path,
-        backdrop_path = BASE_IMAGE_URL + backdrop_path
+        poster_path = BASE_IMAGE_MEDIUM + poster_path,
+        backdrop_path = BASE_IMAGE_MEDIUM + backdrop_path
     )

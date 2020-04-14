@@ -2,7 +2,18 @@ package com.tin.popularmovies
 
 object Const {
 
-    const val BASE_IMAGE_URL = "http://image.tmdb.org/t/p/w342/"
+    private const val BASE_IMAGE_URL = "http://image.tmdb.org/t/p/"
+
+    private const val IMAGE_SIZE_W342 = "w342"
+    private const val IMAGE_SIZE_W185 = "w185"
+    private const val IMAGE_SIZE_W154 = "w154"
+
+    const val BASE_IMAGE_LARGE = BASE_IMAGE_URL + IMAGE_SIZE_W342
+    const val BASE_IMAGE_MEDIUM = BASE_IMAGE_URL + IMAGE_SIZE_W185
+    const val BASE_IMAGE_SMALL = BASE_IMAGE_URL + IMAGE_SIZE_W154
+
+
+
 
     const val YOUTUBE_THUMBNAIL_START_URL: String = "https://img.youtube.com/vi/"
     const val YOUTUBE_THUMBNAIL_END_URL: String = "/0.jpg"
