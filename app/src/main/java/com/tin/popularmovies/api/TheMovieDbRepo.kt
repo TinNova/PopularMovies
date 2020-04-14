@@ -11,10 +11,10 @@ import javax.inject.Inject
 
 class TheMovieDbRepo @Inject constructor(private val theMovieDbApi: TheMovieDbApi) {
 
-    fun getTopRateMovies(): Single<List<Movie>> =
+    fun getTopRatedMovies(page: Int): Single<List<Movie>> =
         theMovieDbApi.getTopRatedMovies(
             BuildConfig.MOVIE_DATA_BASE_API,
-            1
+            page
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

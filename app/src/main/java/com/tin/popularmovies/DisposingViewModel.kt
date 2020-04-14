@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable
  */
 abstract class DisposingViewModel : ViewModel(), LifecycleObserver {
 
-    private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
+    val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
     protected fun add(disposable: Disposable) {
         compositeDisposable.add(disposable)

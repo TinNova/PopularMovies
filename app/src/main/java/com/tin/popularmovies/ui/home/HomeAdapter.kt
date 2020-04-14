@@ -5,37 +5,41 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.tin.popularmovies.R
 import com.tin.popularmovies.api.models.Movie
 import kotlinx.android.synthetic.main.item_movie.view.*
 
+
 class HomeAdapter(private val onMovieClicked: (Movie, CardView) -> Unit) :
-    RecyclerView.Adapter<HomeAdapter.MovieHolder>() {
+    PagedListAdapter<Movie, HomeAdapter.MovieHolder>(MOVIE_COMPARATOR) {
 
     private var movies: List<Movie> = listOf()
-
-    override fun getItemCount(): Int = movies.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder =
         MovieHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false))
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
 
-        val movie = movies[position]
+        val movie = getItem(position)
 
-        Picasso.get()
-            .load(movie.poster_path)
-            .placeholder(R.drawable.img_movie_poster_placeholder)
-            .into(holder.itemView.movie_image)
+        movie?.let {
+            Picasso.get()
+                .load(movie.poster_path)
+                .placeholder(R.drawable.img_movie_poster_placeholder)
+                .into(holder.itemView.movie_image)
 
-        /*
-         * Giving each item a unique transitionName by using the movie.id
-         */
-        ViewCompat.setTransitionName(holder.itemView.movie_image, movie.id.toString());
-        holder.itemView.setOnClickListener { onMovieClicked(movie, holder.itemView.movie_card) }
+            /*
+            * Giving each item a unique transitionName by using the movie.id
+            */
+            ViewCompat.setTransitionName(holder.itemView.movie_image, movie.id.toString());
+            holder.itemView.setOnClickListener { onMovieClicked(movie, holder.itemView.movie_card) }
+        }
     }
+
 
     fun setData(data: List<Movie>) {
         movies = data
@@ -43,4 +47,15 @@ class HomeAdapter(private val onMovieClicked: (Movie, CardView) -> Unit) :
     }
 
     class MovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    companion object {
+        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<Movie>() {
+            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+                oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+                newItem == oldItem
+        }
+    }
+
 }

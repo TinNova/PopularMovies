@@ -45,8 +45,16 @@ class HomeActivity : AppCompatActivity() {
         setupRecyclerView()
 
         viewModel.onViewLoaded()
+        observePaging()
         observeViewState()
     }
+
+    private fun observePaging() {
+        viewModel.moviePagedList.observe(this, Observer {
+            adapter.submitList(it)
+        })
+    }
+
 
     private fun observeViewState() {
         viewModel.viewState.observe(this, Observer<HomeViewState> {
@@ -87,7 +95,8 @@ class HomeActivity : AppCompatActivity() {
                     this,
                     cardView,
                     ViewCompat.getTransitionName(cardView)!! //-> Handle this better
-                ).toBundle())
+                ).toBundle()
+            )
         }
 
 //        ViewCompat.getTransitionName(imageView)?.let {
