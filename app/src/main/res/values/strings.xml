@@ -12,6 +12,16 @@
     <string name="cast">Cast</string>
     <string name="reviews">Reviews</string>
 
+    <!-- - - - - - - - - - - - - - -  -->
+    <!--   Activity Login Strings    -->
+    <!-- - - - - - - - - - - - - - -  -->
+
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="skip">Skip</string>
+
     <string name="transition_movie_image">movie_image</string>
 
 

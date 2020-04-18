@@ -13,17 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.home.HomeActivity"
+            android:name=".ui.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.home.HomeActivity" />
         <activity
             android:name=".ui.detail.DetailActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             android:theme="@style/TransparentStatusBarTheme" />
     </application>
-
 </manifest>

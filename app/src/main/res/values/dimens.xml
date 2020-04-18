@@ -9,6 +9,7 @@
 
     <!-- Margins -->
     <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_double">32dp</dimen>
 
     <dimen name="detail_poster_top_margin">206dp</dimen>
     <dimen name="detail_poster_corner_radius">8dp</dimen>
