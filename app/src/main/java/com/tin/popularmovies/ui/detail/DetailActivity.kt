@@ -4,6 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.squareup.picasso.Picasso
 import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
@@ -22,6 +28,7 @@ import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_ID
 import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_TRANSITION
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_detail.*
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 
@@ -30,14 +37,15 @@ class DetailActivity : AppCompatActivity() {
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory<DetailViewModel>
     private lateinit var viewModel: DetailViewModel
-
     private val castAdapter = CastAdapter()
-
     private val trailerAdapter: TrailerAdapter by lazy {
         TrailerAdapter {
             playTrailer(it)
         }
     }
+    private lateinit var movie: Movie
+    private lateinit var mDocRef: DocumentReference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +54,7 @@ class DetailActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
 
         intent.extras?.let {
-            val movie = it.get(MOVIE_ID) as Movie
+            movie = it.get(MOVIE_ID) as Movie
             viewModel.onViewLoaded(movie.id)
             movie_card.transitionName = it.get(MOVIE_TRANSITION) as String
             Picasso.get().load(movie.poster_path).into(movie_image)
@@ -62,6 +70,18 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         observeViewState()
         setupRecyclerView()
+
+        fetchButton.setOnClickListener {
+            fetchMovie()
+        }
+
+
+        val userUid = FirebaseAuth.getInstance().currentUser?.uid
+
+        val movieUid =  movie.id
+
+        mDocRef = FirebaseFirestore.getInstance().document("$USERS_COLLECTION_KEY/$userUid/$MOVIES_COLLECTION_KEY/$movieUid")
+
     }
 
     private fun observeViewState() {
@@ -122,14 +142,62 @@ class DetailActivity : AppCompatActivity() {
         supportFinishAfterTransition()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 supportFinishAfterTransition()
                 return true
             }
+            R.id.favourite -> {
+                saveMovieToFireCloud()
+
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveMovieToFireCloud() {
+
+
+        val movieToSave = hashMapOf(
+            "backdrop_path" to movie.backdrop_path,
+            "id" to movie.id,
+            "overview" to movie.overview,
+            "poster_path" to movie.poster_path,
+            "title" to movie.title,
+            "release_date" to movie.release_date,
+            "vote_average" to movie.vote_average
+        )
+
+        mDocRef.set(movieToSave).addOnSuccessListener {
+            Log.d("Movie", "Document has been saved!")
+        }.addOnFailureListener {
+            Log.d("Movie", "Document was not saved!")
+        }
+
+    }
+
+    private fun fetchMovie() {
+
+        mDocRef.get().addOnSuccessListener {
+            if (it.exists()) {
+
+                it.toObject<Movie>()?.let {
+
+                    val savedMovie: Movie = it
+                    movie_synopsis.text = savedMovie.title
+
+                    val title = savedMovie.title
+
+                    Log.d("Movie", "Document Retrieved: $title")
+                }
+            }
+        }
     }
 
     private fun setCollapsingToolbarTitle(title: String) {
@@ -147,5 +215,11 @@ class DetailActivity : AppCompatActivity() {
                 isShow = false
             }
         })
+    }
+
+    companion object {
+        const val MOVIE_DATA_KEY = "movie"
+        const val USERS_COLLECTION_KEY = "Users"
+        const val MOVIES_COLLECTION_KEY = "Movies"
     }
 }
