@@ -75,6 +75,10 @@ class DetailActivity : AppCompatActivity() {
             fetchMovie()
         }
 
+        deleteButton.setOnClickListener {
+            deleteMovie()
+        }
+
 
         val userUid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -197,6 +201,23 @@ class DetailActivity : AppCompatActivity() {
                     Log.d("Movie", "Document Retrieved: $title")
                 }
             }
+        }.addOnFailureListener {
+
+            Log.d("Movie", "Document Failed To Retrieve")
+
+        }
+    }
+
+    private fun deleteMovie() {
+
+        mDocRef.delete().addOnSuccessListener {
+
+            Log.d("Movie", "Document Deleted")
+
+        }.addOnFailureListener {
+
+            Log.d("Movie", "Document Failed To Delete")
+
         }
     }
 

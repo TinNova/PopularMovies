@@ -208,19 +208,19 @@
                 android:id="@+id/fetchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="Retrieve"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movie_release_date" />
 
-            <TextView
-                android:id="@+id/downloadedTitle"
+            <Button
+                android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/fetchButton"
-                app:layout_constraintEnd_toStartOf="@+id/fetchButton"
-                app:layout_constraintStart_toEndOf="@+id/synopsis_text"
-                app:layout_constraintTop_toTopOf="@+id/fetchButton" />
+                android:text="Delete"
+                app:layout_constraintStart_toEndOf="@id/synopsis_text"
+                app:layout_constraintEnd_toStartOf="@id/fetchButton"
+                app:layout_constraintBottom_toBottomOf="@id/fetchButton" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
