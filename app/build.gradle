@@ -89,4 +89,6 @@ dependencies {
     implementation "androidx.paging:paging-runtime:2.1.2"
     // Firebase Auth
     implementation 'com.google.firebase:firebase-auth:19.3.0'
+    // Firebase Cloud Firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.2'
 }

@@ -21,6 +21,7 @@
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="skip">Skip</string>
+    <string name="auth_error">Authentication failed</string>
 
     <!-- - - - - - - - - - - - - - -  -->
     <!--      Movie Filter Menu       -->

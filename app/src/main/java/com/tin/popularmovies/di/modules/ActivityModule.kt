@@ -1,6 +1,6 @@
 package com.tin.popularmovies.di.modules
 
-import com.tin.popularmovies.ui.LoginActivity
+import com.tin.popularmovies.ui.login.LoginActivity
 import com.tin.popularmovies.ui.detail.DetailActivity
 import com.tin.popularmovies.ui.home.HomeActivity
 import dagger.Module
