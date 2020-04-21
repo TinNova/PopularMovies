@@ -37,6 +37,29 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    // Needed when show list of saved Movies in MainActivity
+//    private fun fetchMovie() {
+//
+//        mDocRef.get().addOnSuccessListener {
+//            if (it.exists()) {
+//
+//                it.toObject<Movie>()?.let {
+//
+//                    val savedMovie: Movie = it
+//                    movie_synopsis.text = savedMovie.title
+//
+//                    val title = savedMovie.title
+//
+//                    Log.d("Movie", "Document Retrieved: $title")
+//                }
+//            }
+//        }.addOnFailureListener {
+//
+//            Log.d("Movie", "Document Failed To Retrieve")
+//
+//        }
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)

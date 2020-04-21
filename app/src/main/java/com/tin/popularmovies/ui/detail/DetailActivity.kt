@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,11 +25,11 @@ import com.tin.popularmovies.ItemDecorator
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
 import com.tin.popularmovies.api.models.Movie
+import com.tin.popularmovies.showToast
 import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_ID
 import com.tin.popularmovies.ui.home.HomeActivity.Companion.MOVIE_TRANSITION
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_detail.*
-import okhttp3.internal.wait
 import javax.inject.Inject
 
 
@@ -43,19 +44,21 @@ class DetailActivity : AppCompatActivity() {
             playTrailer(it)
         }
     }
-    private lateinit var movie: Movie
-    private lateinit var mDocRef: DocumentReference
 
+    private var isSavedInCloud: Boolean = false
+    private lateinit var favouriteMenu: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         AndroidInjection.inject(this)
+        setSupportActionBar(tool_bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         viewModel = ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
 
         intent.extras?.let {
-            movie = it.get(MOVIE_ID) as Movie
-            viewModel.onViewLoaded(movie.id)
+            val movie = it.get(MOVIE_ID) as Movie
+            viewModel.onViewLoaded(movie)
             movie_card.transitionName = it.get(MOVIE_TRANSITION) as String
             Picasso.get().load(movie.poster_path).into(movie_image)
             Picasso.get().load(movie.backdrop_path).into(backdrop_image)
@@ -66,26 +69,8 @@ class DetailActivity : AppCompatActivity() {
             setCollapsingToolbarTitle(movie.title)
         }
 
-        setSupportActionBar(tool_bar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         observeViewState()
         setupRecyclerView()
-
-        fetchButton.setOnClickListener {
-            fetchMovie()
-        }
-
-        deleteButton.setOnClickListener {
-            deleteMovie()
-        }
-
-
-        val userUid = FirebaseAuth.getInstance().currentUser?.uid
-
-        val movieUid =  movie.id
-
-        mDocRef = FirebaseFirestore.getInstance().document("$USERS_COLLECTION_KEY/$userUid/$MOVIES_COLLECTION_KEY/$movieUid")
-
     }
 
     private fun observeViewState() {
@@ -103,6 +88,20 @@ class DetailActivity : AppCompatActivity() {
 //                    true -> network_error.visible()
 //                    false -> network_error.gone()
                 }
+                when (it.isSavedInCloud) {
+                    true -> {
+                        isSavedInCloud = true
+                        favouriteMenu.setIcon(R.drawable.ic_favorite_white_24dp)
+                    }
+                    false -> {
+                        isSavedInCloud = false
+                        favouriteMenu.setIcon(R.drawable.ic_favorite_border_white_24dp)
+                    }
+                }
+                when (it.toastMessage) {
+                    null -> Log.d("ignore", "ignore")
+                    else -> this.showToast(getString(it.toastMessage))
+                }
             }
         })
     }
@@ -119,7 +118,7 @@ class DetailActivity : AppCompatActivity() {
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Can't Play Trailer", Toast.LENGTH_LONG).show()
+            this.showToast(getString(R.string.trailer_play_failed))
         }
     }
 
@@ -128,8 +127,7 @@ class DetailActivity : AppCompatActivity() {
         setupLinearLayout(cast_recyclerView)
         trailer_recyclerview.adapter = trailerAdapter
         setupLinearLayout(trailer_recyclerview)
-
-        collapsing_toolbar.setExpandedTitleColor(Color.parseColor("#00FFFFFF"));
+        collapsing_toolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.transparent))
     }
 
     private fun setupLinearLayout(recyclerview: RecyclerView) {
@@ -148,6 +146,8 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
+        favouriteMenu = menu.findItem(R.id.favourite_icon)
+        viewModel.checkIfSavedInCloud()
         return true
     }
 
@@ -157,68 +157,18 @@ class DetailActivity : AppCompatActivity() {
                 supportFinishAfterTransition()
                 return true
             }
-            R.id.favourite -> {
-                saveMovieToFireCloud()
-
+            R.id.favourite_icon -> {
+                if (isSavedInCloud) {
+                    isSavedInCloud = false
+                    viewModel.deleteMovie()
+                    favouriteMenu.setIcon(R.drawable.ic_favorite_border_white_24dp)
+                } else {
+                    // icon only changes if movie saved successfully
+                    viewModel.saveMovieToCloud()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun saveMovieToFireCloud() {
-
-
-        val movieToSave = hashMapOf(
-            "backdrop_path" to movie.backdrop_path,
-            "id" to movie.id,
-            "overview" to movie.overview,
-            "poster_path" to movie.poster_path,
-            "title" to movie.title,
-            "release_date" to movie.release_date,
-            "vote_average" to movie.vote_average
-        )
-
-        mDocRef.set(movieToSave).addOnSuccessListener {
-            Log.d("Movie", "Document has been saved!")
-        }.addOnFailureListener {
-            Log.d("Movie", "Document was not saved!")
-        }
-
-    }
-
-    private fun fetchMovie() {
-
-        mDocRef.get().addOnSuccessListener {
-            if (it.exists()) {
-
-                it.toObject<Movie>()?.let {
-
-                    val savedMovie: Movie = it
-                    movie_synopsis.text = savedMovie.title
-
-                    val title = savedMovie.title
-
-                    Log.d("Movie", "Document Retrieved: $title")
-                }
-            }
-        }.addOnFailureListener {
-
-            Log.d("Movie", "Document Failed To Retrieve")
-
-        }
-    }
-
-    private fun deleteMovie() {
-
-        mDocRef.delete().addOnSuccessListener {
-
-            Log.d("Movie", "Document Deleted")
-
-        }.addOnFailureListener {
-
-            Log.d("Movie", "Document Failed To Delete")
-
-        }
     }
 
     private fun setCollapsingToolbarTitle(title: String) {
@@ -236,11 +186,5 @@ class DetailActivity : AppCompatActivity() {
                 isShow = false
             }
         })
-    }
-
-    companion object {
-        const val MOVIE_DATA_KEY = "movie"
-        const val USERS_COLLECTION_KEY = "Users"
-        const val MOVIES_COLLECTION_KEY = "Movies"
     }
 }

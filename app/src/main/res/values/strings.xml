@@ -11,6 +11,11 @@
     <string name="trailers">Trailers</string>
     <string name="cast">Cast</string>
     <string name="reviews">Reviews</string>
+    <string name="saved_cloud">Saved to cloud!</string>
+    <string name="save_failed_cloud">Not saved to cloud, try again</string>
+    <string name="deleted_cloud">Deleted from cloud!</string>
+    <string name="delete_failed_cloud">Not deleted from cloud, try again</string>
+    <string name="trailer_play_failed">Can\'t Play Trailer</string>
 
     <!-- - - - - - - - - - - - - - -->
     <!--   Activity Login Strings  -->

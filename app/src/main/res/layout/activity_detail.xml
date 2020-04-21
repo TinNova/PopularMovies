@@ -204,24 +204,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/cast_title"
                 tools:layout_editor_absoluteX="8dp" />
 
-            <Button
-                android:id="@+id/fetchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Retrieve"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_release_date" />
-
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                app:layout_constraintStart_toEndOf="@id/synopsis_text"
-                app:layout_constraintEnd_toStartOf="@id/fetchButton"
-                app:layout_constraintBottom_toBottomOf="@id/fetchButton" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
