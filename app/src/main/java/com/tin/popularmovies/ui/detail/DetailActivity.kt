@@ -69,7 +69,6 @@ class DetailActivity : AppCompatActivity() {
             setCollapsingToolbarTitle(movie.title)
         }
 
-        observeViewState()
         setupRecyclerView()
     }
 
@@ -147,7 +146,8 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
         favouriteMenu = menu.findItem(R.id.favourite_icon)
-        viewModel.checkIfSavedInCloud()
+        observeViewState()
+        viewModel.onCreateOptionsMenu()
         return true
     }
 
@@ -160,11 +160,11 @@ class DetailActivity : AppCompatActivity() {
             R.id.favourite_icon -> {
                 if (isSavedInCloud) {
                     isSavedInCloud = false
-                    viewModel.deleteMovie()
+                    viewModel.onIconClickedDeleteMovie()
                     favouriteMenu.setIcon(R.drawable.ic_favorite_border_white_24dp)
                 } else {
                     // icon only changes if movie saved successfully
-                    viewModel.saveMovieToCloud()
+                    viewModel.onIconClickedSaveMovie()
                 }
             }
         }

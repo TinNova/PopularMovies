@@ -15,6 +15,10 @@
     <string name="save_failed_cloud">Not saved to cloud, try again</string>
     <string name="deleted_cloud">Deleted from cloud!</string>
     <string name="delete_failed_cloud">Not deleted from cloud, try again</string>
+    <string name="saved_locally">Saved to device!</string>
+    <string name="save_failed_locally">Not saved on device, try again</string>
+    <string name="deleted_locally">Deleted from device!</string>
+    <string name="delete_failed_locally">Not deleted from device, try again</string>
     <string name="trailer_play_failed">Can\'t Play Trailer</string>
 
     <!-- - - - - - - - - - - - - - -->
