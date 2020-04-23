@@ -4,18 +4,14 @@
     <style name="AppTheme" parent="BaseTheme"/>
 
     <!-- Base application theme. -->
-    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!-- Shared Activity Transition-->
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowEnterTransition">@transition/track_transition_exclusions</item>
-        <item name="android:windowExitTransition">@transition/track_transition_exclusions</item>
     </style>
 
-    <style name="TransparentStatusBarTheme" parent="BaseTheme">
+    <style name="NoActionBarTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
