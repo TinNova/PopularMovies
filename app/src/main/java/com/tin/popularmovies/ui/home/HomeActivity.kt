@@ -41,12 +41,18 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         setupRecyclerView()
         viewModel.onViewLoaded()
-        observePaging()
+        observePagingState()
         observeViewState()
 
         error_btn.setOnClickListener {
             viewModel.retryGetMovies()
         }
+    }
+
+    private fun observePagingState() {
+        viewModel.pagedMovieState.observe(this, Observer {
+            networkAdapter.submitList(it)
+        })
     }
 
     private fun observeViewState() {
@@ -72,12 +78,6 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
                     false -> isUserLoggedIn = false
                 }
             }
-        })
-    }
-
-    private fun observePaging() {
-        viewModel.pagedMovieState.observe(this, Observer {
-            networkAdapter.submitList(it)
         })
     }
 
@@ -137,17 +137,17 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
         intent.putExtra(MOVIE_TRANSITION, ViewCompat.getTransitionName(cardView));
 
         // what happens when getTransitionName is null?
-        if (ViewCompat.getTransitionName(cardView) == null) {
-            startActivity(intent)
-        } else {
+        if (ViewCompat.getTransitionName(cardView) != null) {
             startActivity(
                 intent,
                 makeSceneTransitionAnimation(
                     this,
                     cardView,
-                    ViewCompat.getTransitionName(cardView)!! //-> Handle this better
+                    ViewCompat.getTransitionName(cardView)!!
                 ).toBundle()
             )
+        } else {
+            startActivity(intent)
         }
     }
 
