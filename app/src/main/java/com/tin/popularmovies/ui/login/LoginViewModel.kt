@@ -14,19 +14,15 @@ class LoginViewModel @Inject constructor(
 
 ) : ViewModel(), LifecycleObserver {
 
-    private lateinit var auth: FirebaseAuth
     val fBUserLD = MutableLiveData<LoginState>()
 
     fun onInitView() {
-
-        auth = FirebaseAuth.getInstance()
-
         login(false)
     }
 
     private fun login(isAuthError: Boolean) {
-        if (auth.currentUser != null) {
-            fBUserLD.value = LoginState(auth.currentUser, isLoggedIn = true)
+        if (fireCloud.isUserLoggedIn()) {
+            fBUserLD.value = LoginState(isLoggedIn = true)
         } else {
             fBUserLD.value = LoginState(isLoggedIn = false, isAuthError = isAuthError)
         }
@@ -36,7 +32,7 @@ class LoginViewModel @Inject constructor(
     fun onRegisterBtnClicked(email: String, password: String) {
         if (isValidateForm(email, password)) {
 
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            fireCloud.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
                     login(false)
@@ -53,7 +49,7 @@ class LoginViewModel @Inject constructor(
         /** Sign-In Existing Users, when SignIn Btn Clicked */
         if (isValidateForm(email, password)) {
 
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            fireCloud.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     login(false)
 

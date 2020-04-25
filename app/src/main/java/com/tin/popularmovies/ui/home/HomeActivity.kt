@@ -15,6 +15,7 @@ import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
 import com.tin.popularmovies.api.models.Movie
 import com.tin.popularmovies.ui.detail.DetailActivity
+import com.tin.popularmovies.ui.login.LoginActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
@@ -28,8 +29,8 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
     private val networkAdapter = HomeNetworkAdapter(this)
     private val savedAdapter = HomeSavedAdapter(this)
 
-    private lateinit var favouriteMenu: MenuItem
     private var isShowingSaved = false
+    private var isUserLoggedIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +60,13 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
                 }
                 when (it.isShowNetwork) {
                     true -> showNetworkMovies()
+                }
+                when (it.isSigningOut) {
+                    true -> navigateToLoginActivity()
+                }
+                when (it.isUserLoggedIn) {
+                    true -> isUserLoggedIn = true
+                    false -> isUserLoggedIn = false
                 }
             }
         })
@@ -90,16 +98,16 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_detail, menu)
-        favouriteMenu = menu.findItem(R.id.favourite_icon)
+        menuInflater.inflate(R.menu.menu_home, menu)
+        menu.findItem(R.id.log_out_icon).isVisible = isUserLoggedIn
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.favourite_icon -> {
-                viewModel.onFavouriteIconClicked(isShowingSaved)
-            }
+            R.id.favourite_icon -> viewModel.onFavouriteIconClicked(isShowingSaved)
+            R.id.log_out_icon -> viewModel.onLogoutIconClicked()
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -126,6 +134,10 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
                 ).toBundle()
             )
         }
+    }
+
+    private fun navigateToLoginActivity() {
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 
     companion object {

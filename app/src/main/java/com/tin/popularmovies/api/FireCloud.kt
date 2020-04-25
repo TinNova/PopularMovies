@@ -8,12 +8,14 @@ import javax.inject.Inject
 class FireCloud @Inject constructor() {
 
     // This is a Singleton. It doesn't need to be added to a Dagger Module
-    private val fireBaseInstance = FirebaseAuth.getInstance()
+    private val fireBaseAuthInstance = FirebaseAuth.getInstance()
     private val fireBaseFireStoreInstance = FirebaseFirestore.getInstance()
 
-    fun isUserLoggedIn(): Boolean = fireBaseInstance.currentUser != null
+    fun isUserLoggedIn(): Boolean = fireBaseAuthInstance.currentUser != null
 
-    private val userUid = fireBaseInstance.currentUser?.uid
+    private val userUid = fireBaseAuthInstance.currentUser?.uid
+
+    val auth = fireBaseAuthInstance
 
     val moviesCollection = fireBaseFireStoreInstance
         .document("$USERS_COLLECTION_KEY/$userUid")

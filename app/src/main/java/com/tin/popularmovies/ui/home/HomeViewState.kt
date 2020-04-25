@@ -12,6 +12,8 @@ data class HomeViewState(
     val isNetworkError: Boolean = false,
     val isShowingCloud: Boolean = false, // this isn't used
     val isShowingRoom: Boolean = false, // this isn't used
-    val isShowNetwork: Boolean = false // this isn't used
+    val isShowNetwork: Boolean = false, // this isn't used
+    val isSigningOut: Boolean = false,
+    val isUserLoggedIn: Boolean = false
 )
 

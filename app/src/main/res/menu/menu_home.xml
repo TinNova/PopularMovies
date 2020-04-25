@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="@string/favourites"
+        android:id="@+id/favourite_icon"
+        android:icon="@drawable/ic_favorite_border_white_24dp"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:title="@string/log_out"
+        android:id="@+id/log_out_icon"
+        android:icon="@drawable/baseline_exit_to_app_white_24"
+        android:visible="false"
+        app:showAsAction="never" />
+
+</menu>

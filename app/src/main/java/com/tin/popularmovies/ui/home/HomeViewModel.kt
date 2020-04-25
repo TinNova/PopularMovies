@@ -28,6 +28,8 @@ class HomeViewModel @Inject constructor(
         getTopRatedMovies()
 
         isLoggedIn = fireCloud.isUserLoggedIn()
+        viewState.value = HomeViewState(isUserLoggedIn = isLoggedIn)
+
     }
 
     private fun getTopRatedMovies() {
@@ -51,6 +53,11 @@ class HomeViewModel @Inject constructor(
         } else {
             if (isLoggedIn) showMoviesFromCloud() else showMoviesFromRoom()
         }
+    }
+
+    fun onLogoutIconClicked() {
+        fireCloud.auth.signOut()
+        viewState.value = HomeViewState(isSigningOut = true)
     }
 
     private fun showMoviesFromNetwork() {
