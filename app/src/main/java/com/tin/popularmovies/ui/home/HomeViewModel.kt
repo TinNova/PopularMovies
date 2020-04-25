@@ -63,12 +63,9 @@ class HomeViewModel @Inject constructor(
     private fun showMoviesFromNetwork() {
         viewState.value = HomeViewState(
             movies = emptyList(),
-            isPresenting = true,
+            isShowingSaved = false,
             isLoading = false,
-            isNetworkError = false,
-            isShowingCloud = false, // this isn't used
-            isShowingRoom = false, // this isn't used
-            isShowNetwork = true // this isn't used
+            isNetworkError = false
         )
 
     }
@@ -83,11 +80,9 @@ class HomeViewModel @Inject constructor(
 
                 viewState.value = HomeViewState(
                     movies = movies,
-                    isPresenting = true,
+                    isShowingSaved = true,
                     isLoading = false,
-                    isNetworkError = false, // this isn't used
-                    isShowingCloud = true, // this isn't used
-                    isShowingRoom = false // this isn't used
+                    isNetworkError = false
                 )
                 Log.d("Movie", "Document Retrieved: ${movies.size}")
 
@@ -102,11 +97,9 @@ class HomeViewModel @Inject constructor(
         add(theMovieDbRepo.getAllMovies().subscribe({
             viewState.value = HomeViewState(
                 movies = it,
-                isPresenting = true,
+                isShowingSaved = true,
                 isLoading = false,
-                isNetworkError = false, // this isn't used
-                isShowingCloud = false, // this isn't used
-                isShowingRoom = true // this isn't used
+                isNetworkError = false
             )
         }, {
 

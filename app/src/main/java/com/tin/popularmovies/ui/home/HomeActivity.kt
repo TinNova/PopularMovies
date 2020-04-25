@@ -46,9 +46,9 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
     private fun observeViewState() {
         viewModel.viewState.observe(this, Observer<HomeViewState> {
             it?.let {
-                when (it.isPresenting) {
+                when (it.isShowingSaved) {
                     true -> showSavedMovies(it.movies)
-//                    false ->
+                    false -> showNetworkMovies()
                 }
                 when (it.isLoading) {
 //                    true -> loading_icon.visible()
@@ -57,9 +57,6 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
                 when (it.isNetworkError) {
 //                    true -> network_error.visible()
 //                    false -> network_error.gone()
-                }
-                when (it.isShowNetwork) {
-                    true -> showNetworkMovies()
                 }
                 when (it.isSigningOut) {
                     true -> navigateToLoginActivity()
