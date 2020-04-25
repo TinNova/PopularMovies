@@ -16,7 +16,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         Picasso.get()
             .load(movie.poster_path)
-            .placeholder(R.drawable.img_movie_poster_placeholder)
+            .placeholder(R.drawable.ic_favorite_white_24dp)
             .into(itemView.movie_image)
 
         itemView.setOnClickListener {

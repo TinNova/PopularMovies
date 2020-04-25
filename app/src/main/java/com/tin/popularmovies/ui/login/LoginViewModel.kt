@@ -6,9 +6,12 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.tin.popularmovies.api.FireCloud
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
+    private val fireCloud: FireCloud
+
 ) : ViewModel(), LifecycleObserver {
 
     private lateinit var auth: FirebaseAuth

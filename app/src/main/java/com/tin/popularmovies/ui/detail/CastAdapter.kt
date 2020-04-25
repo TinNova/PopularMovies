@@ -31,6 +31,7 @@ class CastAdapter : RecyclerView.Adapter<CastViewHolder>() {
         fun bind(cast: Cast) {
             Picasso.get()
                 .load(cast.profile_path)
+                .placeholder(R.drawable.ic_placeholder)
                 .into(itemView.cast_thumbnail)
 
             itemView.character_name.text = cast.character
