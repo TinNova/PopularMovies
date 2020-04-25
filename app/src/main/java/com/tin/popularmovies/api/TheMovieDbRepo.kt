@@ -27,6 +27,7 @@ class TheMovieDbRepo @Inject constructor(
             .flattenAsObservable { it.results }
             .map { it.returnCleanMovie() }
             .toList()
+            .retry(RETRIES)
 
     private fun getTrailers(movieId: Int): Single<List<Trailer>> =
         theMovieDbApi.getTrailers(
@@ -87,4 +88,14 @@ class TheMovieDbRepo @Inject constructor(
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 
+    fun getAllMovies(): Single<List<Movie>> = movieDao.getAllMovies()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .flattenAsObservable { it }
+        .map { it.mapSqlMovieToMovie() }
+        .toList()
+
+    companion object {
+        const val RETRIES = 2L
+    }
 }

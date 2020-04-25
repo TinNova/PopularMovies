@@ -2,7 +2,8 @@ package com.tin.popularmovies.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation
@@ -13,52 +14,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
 import com.tin.popularmovies.api.models.Movie
-import com.tin.popularmovies.gone
 import com.tin.popularmovies.ui.detail.DetailActivity
-import com.tin.popularmovies.visible
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
-class HomeActivity : AppCompatActivity() {
-
-    companion object {
-        const val MOVIE_ID = "movie_key"
-        const val MOVIE_TRANSITION = "movie_transition"
-    }
+class HomeActivity : AppCompatActivity(), MovieClickListener {
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory<HomeViewModel>
     private lateinit var viewModel: HomeViewModel
 
-    private val adapter: HomeAdapter by lazy {
-        HomeAdapter { movie: Movie, cardView: CardView ->
-            launchDetailActivity(movie, cardView)
-        }
-    }
+    private val networkAdapter = HomeNetworkAdapter(this)
+    private val savedAdapter = HomeSavedAdapter(this)
 
-    // Needed when show list of saved Movies in MainActivity
-//    private fun fetchMovie() {
-//
-//        mDocRef.get().addOnSuccessListener {
-//            if (it.exists()) {
-//
-//                it.toObject<Movie>()?.let {
-//
-//                    val savedMovie: Movie = it
-//                    movie_synopsis.text = savedMovie.title
-//
-//                    val title = savedMovie.title
-//
-//                    Log.d("Movie", "Document Retrieved: $title")
-//                }
-//            }
-//        }.addOnFailureListener {
-//
-//            Log.d("Movie", "Document Failed To Retrieve")
-//
-//        }
-//    }
+    private lateinit var favouriteMenu: MenuItem
+    private var isShowingSaved = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,25 +37,17 @@ class HomeActivity : AppCompatActivity() {
         AndroidInjection.inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         setupRecyclerView()
-
         viewModel.onViewLoaded()
         observePaging()
         observeViewState()
     }
 
-    private fun observePaging() {
-        viewModel.moviePagedList.observe(this, Observer {
-            adapter.submitList(it)
-        })
-    }
-
-
     private fun observeViewState() {
         viewModel.viewState.observe(this, Observer<HomeViewState> {
             it?.let {
                 when (it.isPresenting) {
-                    true -> showMovies(it.movies)
-                    false -> movie_recycler_view.gone()
+                    true -> showSavedMovies(it.movies)
+//                    false ->
                 }
                 when (it.isLoading) {
 //                    true -> loading_icon.visible()
@@ -94,13 +57,55 @@ class HomeActivity : AppCompatActivity() {
 //                    true -> network_error.visible()
 //                    false -> network_error.gone()
                 }
+                when (it.isShowNetwork) {
+                    true -> showNetworkMovies()
+                }
             }
         })
     }
 
-    private fun showMovies(movies: List<Movie>) {
-        movie_recycler_view.visible()
-        adapter.setData(movies)
+    private fun observePaging() {
+        viewModel.pagedMovieState.observe(this, Observer {
+            networkAdapter.submitList(it)
+        })
+    }
+
+    private fun showNetworkMovies() {
+        movie_recycler_view.removeAllViewsInLayout()
+        movie_recycler_view.adapter = networkAdapter
+        isShowingSaved = false
+    }
+
+    private fun showSavedMovies(movies: List<Movie>) {
+        movie_recycler_view.removeAllViewsInLayout()
+        movie_recycler_view.adapter = savedAdapter
+        savedAdapter.setData(movies)
+        isShowingSaved = true
+    }
+
+    private fun setupRecyclerView() {
+        movie_recycler_view.setHasFixedSize(true)
+        movie_recycler_view.layoutManager = GridLayoutManager(this, 2)
+        movie_recycler_view.adapter = networkAdapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        favouriteMenu = menu.findItem(R.id.favourite_icon)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favourite_icon -> {
+                viewModel.onFavouriteIconClicked(isShowingSaved)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onMovieClick(clickedMovie: Movie, movieCard: CardView) {
+        launchDetailActivity(clickedMovie, movieCard)
     }
 
     private fun launchDetailActivity(selectedMovie: Movie, cardView: CardView) {
@@ -121,15 +126,10 @@ class HomeActivity : AppCompatActivity() {
                 ).toBundle()
             )
         }
-
-//        ViewCompat.getTransitionName(imageView)?.let {
-//            startActivity(intent, makeSceneTransitionAnimation(this, imageView, it).toBundle())
-//        }
     }
 
-    private fun setupRecyclerView() {
-        movie_recycler_view.setHasFixedSize(true)
-        movie_recycler_view.layoutManager = GridLayoutManager(this, 2)
-        movie_recycler_view.adapter = adapter
+    companion object {
+        const val MOVIE_ID = "movie_key"
+        const val MOVIE_TRANSITION = "movie_transition"
     }
 }

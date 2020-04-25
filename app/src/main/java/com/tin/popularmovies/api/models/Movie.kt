@@ -2,7 +2,7 @@ package com.tin.popularmovies.api.models
 
 import android.os.Parcelable
 import com.tin.popularmovies.Const.BASE_IMAGE_LARGE
-import com.tin.popularmovies.Const.BASE_IMAGE_MEDIUM
+import com.tin.popularmovies.room.MovieSql
 import kotlinx.android.parcel.Parcelize
 
 
@@ -29,7 +29,7 @@ data class Movie(
     val adult: Boolean = false,
     val overview: String = "",
     val release_date: String = ""
-): Parcelable
+) : Parcelable
 
 fun Movie.returnCleanMovie() =
     Movie(
@@ -40,4 +40,15 @@ fun Movie.returnCleanMovie() =
         overview = overview,
         poster_path = BASE_IMAGE_LARGE + poster_path,
         backdrop_path = BASE_IMAGE_LARGE + backdrop_path
+    )
+
+fun MovieSql.mapSqlMovieToMovie() =
+    Movie(
+        id = id,
+        title = title,
+        vote_average = vote_average,
+        release_date = release_date,
+        overview = overview,
+        poster_path = poster_path,
+        backdrop_path = backdrop_path
     )

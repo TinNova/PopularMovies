@@ -11,7 +11,7 @@ interface MovieDao {
     fun insertMovie(movie: MovieSql): Completable
 
     @Query("SELECT * FROM moviesql")
-    fun getMovies(): Single<List<MovieSql>>
+    fun getAllMovies(): Single<List<MovieSql>>
 
     @Query("SELECT * FROM moviesql WHERE id = :id")
     fun getMovieById(id: Int): Single<MovieSql>

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.tin.popularmovies.api.TheMovieDbRepo
 import com.tin.popularmovies.api.models.Movie
+import com.tin.popularmovies.ui.home.HomeViewState
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -11,7 +12,8 @@ import io.reactivex.disposables.CompositeDisposable
  */
 class MovieDataSourceFactory(
     private val movieDbRepo: TheMovieDbRepo,
-    private val compositeDisposable: CompositeDisposable
+    private val compositeDisposable: CompositeDisposable,
+    private val viewState: MutableLiveData<HomeViewState>
 ) :
     DataSource.Factory<Int, Movie>() {
 
@@ -19,7 +21,7 @@ class MovieDataSourceFactory(
     val movieLiveDataSource = MutableLiveData<MovieDataSource>()
 
     override fun create(): DataSource<Int, Movie> {
-        val movieDataSource = MovieDataSource(movieDbRepo, compositeDisposable) // also pass a disposable
+        val movieDataSource = MovieDataSource(movieDbRepo, compositeDisposable, viewState)
         movieLiveDataSource.postValue(movieDataSource)
         return movieDataSource
     }
