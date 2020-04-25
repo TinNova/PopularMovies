@@ -39,7 +39,7 @@
     <string name="favourites">Favourites</string>
     <string name="log_out">Log Out</string>
 
-
+    <string name="error_text">Error Loading Movies</string>
     <string name="transition_movie_image">movie_image</string>
 
 

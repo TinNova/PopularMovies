@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
 
     val viewState = MutableLiveData<HomeViewState>()
     lateinit var pagedMovieState: LiveData<PagedList<Movie>>
-    private lateinit var liveDataSource: LiveData<MovieDataSource>
+    private lateinit var movieDataSourceLiveData: LiveData<MovieDataSource>
     private var isLoggedIn = false
 
     fun onViewLoaded() {
@@ -29,13 +29,12 @@ class HomeViewModel @Inject constructor(
 
         isLoggedIn = fireCloud.isUserLoggedIn()
         viewState.value = HomeViewState(isUserLoggedIn = isLoggedIn)
-
     }
 
     private fun getTopRatedMovies() {
         val itemDataSourceFactory =
-            MovieDataSourceFactory(theMovieDbRepo, compositeDisposable, viewState) // also send disposable
-        liveDataSource = itemDataSourceFactory.movieLiveDataSource
+            MovieDataSourceFactory(theMovieDbRepo, compositeDisposable, viewState)
+        movieDataSourceLiveData = itemDataSourceFactory.movieDataSourceLiveData
 
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
@@ -44,6 +43,10 @@ class HomeViewModel @Inject constructor(
 
         pagedMovieState = LivePagedListBuilder(itemDataSourceFactory, config).build()
 
+    }
+
+    fun retryGetMovies() {
+        movieDataSourceLiveData.value?.retryGetMovies()
     }
 
     fun onFavouriteIconClicked(isShowingSaved: Boolean) {

@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.tin.popularmovies.R
 import com.tin.popularmovies.ViewModelFactory
 import com.tin.popularmovies.api.models.Movie
+import com.tin.popularmovies.gone
 import com.tin.popularmovies.ui.detail.DetailActivity
 import com.tin.popularmovies.ui.login.LoginActivity
+import com.tin.popularmovies.visible
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
@@ -41,6 +43,10 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
         viewModel.onViewLoaded()
         observePaging()
         observeViewState()
+
+        error_btn.setOnClickListener {
+            viewModel.retryGetMovies()
+        }
     }
 
     private fun observeViewState() {
@@ -55,8 +61,8 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
 //                    false -> loading_icon.gone()
                 }
                 when (it.isNetworkError) {
-//                    true -> network_error.visible()
-//                    false -> network_error.gone()
+                    true -> showErrorMessage()
+                    false -> hideErrorMessage()
                 }
                 when (it.isSigningOut) {
                     true -> navigateToLoginActivity()
@@ -73,6 +79,18 @@ class HomeActivity : AppCompatActivity(), MovieClickListener {
         viewModel.pagedMovieState.observe(this, Observer {
             networkAdapter.submitList(it)
         })
+    }
+
+    private fun showErrorMessage() {
+        error_text.visible()
+        error_btn.visible()
+        movie_recycler_view.gone()
+    }
+
+    private fun hideErrorMessage() {
+        error_text.gone()
+        error_btn.gone()
+        movie_recycler_view.visible()
     }
 
     private fun showNetworkMovies() {

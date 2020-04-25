@@ -17,13 +17,11 @@ class MovieDataSourceFactory(
 ) :
     DataSource.Factory<Int, Movie>() {
 
-    // Is this where the MovieDataSource callBacks are sent?
-    val movieLiveDataSource = MutableLiveData<MovieDataSource>()
+    val movieDataSourceLiveData = MutableLiveData<MovieDataSource>()
 
     override fun create(): DataSource<Int, Movie> {
         val movieDataSource = MovieDataSource(movieDbRepo, compositeDisposable, viewState)
-        movieLiveDataSource.postValue(movieDataSource)
+        movieDataSourceLiveData.postValue(movieDataSource)
         return movieDataSource
     }
-
 }
