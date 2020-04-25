@@ -159,9 +159,7 @@ class DetailActivity : AppCompatActivity() {
             }
             R.id.favourite_icon -> {
                 if (isSavedInCloud) {
-                    isSavedInCloud = false
                     viewModel.onIconClickedDeleteMovie()
-                    favouriteMenu.setIcon(R.drawable.ic_favorite_border_white_24dp)
                 } else {
                     // icon only changes if movie saved successfully
                     viewModel.onIconClickedSaveMovie()

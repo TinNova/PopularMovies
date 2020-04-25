@@ -7,30 +7,30 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tin.popularmovies.DisposingViewModel
 import com.tin.popularmovies.R
+import com.tin.popularmovies.api.FireCloud
 import com.tin.popularmovies.api.TheMovieDbRepo
 import com.tin.popularmovies.api.models.Movie
 import com.tin.popularmovies.room.mapToMovieSql
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
-    private val theMovieDbRepo: TheMovieDbRepo
+    private val theMovieDbRepo: TheMovieDbRepo,
+    private val fireCloud: FireCloud
 ) : DisposingViewModel() {
 
     val viewState = MutableLiveData<DetailViewState>()
 
     private lateinit var movie: Movie
-    private lateinit var mDocRef: DocumentReference
+    private lateinit var movieDocument: DocumentReference
     private var isLoggedIn = false
 
     fun onViewLoaded(movie: Movie) {
         this.movie = movie
         val movieUid = movie.id
 
-        if (FirebaseAuth.getInstance().currentUser != null) {
+        if (fireCloud.isUserLoggedIn()) {
             isLoggedIn = true
-            val userUid = FirebaseAuth.getInstance().currentUser?.uid
-            mDocRef = FirebaseFirestore.getInstance()
-                .document("${USERS_COLLECTION_KEY}/$userUid/${MOVIES_COLLECTION_KEY}/$movieUid")
+            movieDocument = fireCloud.getMovieDocument(movieUid)
         } else {
             isLoggedIn = false
         }
@@ -75,7 +75,7 @@ class DetailViewModel @Inject constructor(
 
     private fun getMovieFromCloud() {
 
-        mDocRef.get().addOnSuccessListener {
+        movieDocument.get().addOnSuccessListener {
 
             if (it.exists()) {
                 viewState.value = DetailViewState(isSavedInCloud = true)
@@ -98,7 +98,7 @@ class DetailViewModel @Inject constructor(
             "vote_average" to movie.vote_average
         )
 
-        mDocRef.set(movieToSave).addOnSuccessListener {
+        movieDocument.set(movieToSave).addOnSuccessListener {
 
             viewState.value = DetailViewState(
                 isSavedInCloud = true,
@@ -112,7 +112,7 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun deleteMovieFromCloud() {
-        mDocRef.delete().addOnSuccessListener {
+        movieDocument.delete().addOnSuccessListener {
 
             viewState.value = DetailViewState(isSavedInCloud = false, toastMessage = R.string.deleted_cloud)
             Log.d("Movie", "Document Deleted")
@@ -168,10 +168,5 @@ class DetailViewModel @Inject constructor(
                     Log.d("Movie", "Document Failed To Delete From Room")
                 })
         )
-    }
-
-    companion object {
-        const val USERS_COLLECTION_KEY = "Users"
-        const val MOVIES_COLLECTION_KEY = "Movies"
     }
 }
